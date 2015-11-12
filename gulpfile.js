@@ -10,14 +10,14 @@ var sass = require('gulp-sass');
 var sourcemaps = require('gulp-sourcemaps');
 var autoprefixer = require('gulp-autoprefixer');
 var clean = require('gulp-clean');
-
+var cssmin = require('gulp-cssmin');
 // var livereload = require('gulp-livereload');
 
-// ¾²Ì¬ÎÄ¼þ´ò°üºÏ²¢
+
 var webpack = require('gulp-webpack');
 
 
-// MD5´Á
+// MD5
 var rev = require('gulp-rev');
 var revCollector = require('gulp-rev-collector');
 var runSequence = require('run-sequence');
@@ -31,32 +31,39 @@ var reload = browserSync.reload;
 
 // watch files for changes and reload
 gulp.task('serve', function() {
+
   browserSync({
     server: {
-      baseDir: './'
+      baseDir: './dist'
     }
   });
 
-  gulp.watch(['*.html', 'css/**/*.css', 'js/**/*.js'], {cwd: './'}, reload);
+  gulp.watch(['**/*.html', 'css/**/*.css', 'js/**/*.js','js/**/*.css'], {cwd: './dist'}, reload);
 });
 
 
 // trans sass to css
 gulp.task('sass',function(){
-  return gulp.src(['./scss/**/*.scss'])
+  return gulp.src(['scss/**/*.scss'])
           .pipe(sourcemaps.init())
           .pipe(sass().on( 'error', sass.logError ))
           .pipe(sourcemaps.write('./maps'))
-          .pipe(gulp.dest('./css/'))
+          .pipe(gulp.dest('css'))
 })
 
 
 gulp.task('sass:watch',function(){
-  gulp.watch('./scss/**/*.scss',['sass'])
+  gulp.watch('scss/**/*.scss',['sass','cssmin'])
 })
 
 
-// ·¢²¼µ½ftp
+gulp.task('cssmin',function(){
+  return gulp.src('css/**/*.css')
+        .pipe(cssmin())
+        .pipe(gulp.dest('dist/css'));
+});
+
+// ftp����
 
 var gutil = require( 'gulp-util' );
 var ftp = require( 'vinyl-ftp' );
@@ -108,10 +115,10 @@ gulp.task('jsDev', function () {
     .pipe(webpack(config))
 
 
-    .pipe(rev())
+   // .pipe(rev())
     .pipe(gulp.dest('./dist/js/'))
-    .pipe(rev.manifest())
-    .pipe(gulp.dest('./dist/rev/js'));
+    //.pipe(rev.manifest())
+   // .pipe(gulp.dest('./dist/rev/js'));
 
 
 });
@@ -135,7 +142,7 @@ gulp.task('image', function () {
 
 
 gulp.task('css', function () {
-  return gulp.src(['./css/app.css'])
+  return gulp.src(['css/**/*.css'])
     .pipe(autoprefixer({
       browsers:['last 2 versions'],
       cascade:false
@@ -150,8 +157,11 @@ gulp.task('css', function () {
 
 
 gulp.task('watch', function () {
-  gulp.watch('./css/*.css', ['css']);
-  gulp.watch('./js/*.js', ['js']);
+  gulp.watch('css/*.css', ['cssmin']);
+  gulp.watch('sass/*.scss', ['sass']);
+  gulp.watch('js/**/*.css',['jsDev','html']);
+  gulp.watch('js/*.js', ['jsDev']);
+ // gulp.watch('*.html',['html']);
 });
 
 
@@ -163,7 +173,7 @@ gulp.task('clean', function () {
 
 
 gulp.task('html', function () {
-  return gulp.src(['./dist/rev/**/*.json', './index.html'])
+  return gulp.src([ './index.html']) //'./dist/rev/**/*.json',
     .pipe( minifyHTML({
                 empty:true,
                 spare:true
@@ -187,6 +197,6 @@ gulp.task('publish', function (callback) {
 
 gulp.task('dev', function (callback) {
   runSequence(
-    [ 'jsDev'],  'html',
+    'clean',['jsDev','watch','sass'],'sass:watch','cssmin' ,'html','serve',
     callback);
 });

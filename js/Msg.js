@@ -2,7 +2,6 @@
 var $ = require('./jquery');
 require('./Msg.css');
 function Msg(opts){
-
 	this.options = opts;
 	this._init();
 	this._render();
@@ -37,6 +36,4 @@ Msg.prototype = {
 		self.$alert.remove();
 	}
 }
-
-
 module.exports = Msg;

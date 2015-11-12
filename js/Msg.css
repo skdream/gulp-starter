@@ -1,8 +1,28 @@
-.masker{
+.ui-masker{
 	position: absolute;
 	top:0;
 	right: 0;
 	bottom: 0;
 	left: 0;
 	background:rgba(0,0,0,0.6);
+}
+
+.ui-alert{
+	z-index: 200;
+	width: 300px;
+	position: absolute;
+	top: 100px;
+	left: 50%;
+	margin-left: -150px;
+	background: url(./loc.png) scroll no-repeat #fff;
+	padding: 20px;
+
+}
+
+.ui-alert p{
+	text-align: center;
+	font-size: 14px;
+	line-height: 32px;
+	background-color: #fff;
+
 }
