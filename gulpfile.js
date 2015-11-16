@@ -161,7 +161,7 @@ gulp.task('watch', function () {
   gulp.watch('sass/*.scss', ['sass']);
   gulp.watch('js/**/*.css',['jsDev','html']);
   gulp.watch('js/*.js', ['jsDev']);
- // gulp.watch('*.html',['html']);
+  gulp.watch('*.html',['html']);
 });
 
 

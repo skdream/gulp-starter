@@ -1,9 +1,44 @@
+@charset "UTF-8";
 * {
   margin: 0;
   padding: 0; }
 
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td, hr, button, article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+  margin: 0;
+  padding: 0; }
+
+ul, ol {
+  list-style: none; }
+
+fieldset, img, button, input {
+  border: 0; }
+
+html, body, nav, ul, li, h2, h3, figure, h1, p {
+  padding: 0px;
+  margin: 0px; }
+
+body {
+  min-width: 320px;
+  font: normal 14px/1.5 Tahoma,"Lucida Grande",Verdana,"Microsoft Yahei",STXihei,hei;
+  color: #000;
+  background: #f2f2f2;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: none;
+  -moz-user-select: none; }
+
+img {
+  border: none; }
+
+a {
+  color: #000;
+  text-decoration: none; }
+
+li {
+  list-style-type: none; }
+
 .header {
-  width: 1024px;
+  width: 100%;
   height: 80px;
   line-height: 80px;
   background-color: #333;
@@ -11,5 +46,68 @@
   margin: 0 auto;
   font-size: 14px;
   text-align: center; }
+
+.clearfix {
+  clear: both;
+  content: " "; }
+
+.ui-masker {
+  width: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  position: absolute;
+  display: none; }
+
+.ui-datepick {
+  display: none;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  z-index: 1000;
+  font-family: "微软雅黑";
+  background-color: #fff; }
+  .ui-datepick .ui-datepick-hd {
+    box-sizing: border-box;
+    width: 100%;
+    background-color: #017aff; }
+    .ui-datepick .ui-datepick-hd li {
+      position: relative;
+      color: #ccc;
+      float: left;
+      width: 33.33%; }
+      .ui-datepick .ui-datepick-hd li.active {
+        color: #fff; }
+      .ui-datepick .ui-datepick-hd li .alias, .ui-datepick .ui-datepick-hd li .date {
+        display: block;
+        text-align: center;
+        font-size: 20px; }
+      .ui-datepick .ui-datepick-hd li .date {
+        font-size: 16px; }
+    .ui-datepick .ui-datepick-hd li:not(:last-child) :after {
+      content: " ";
+      height: 35px;
+      width: 1px;
+      background-color: #ccc;
+      position: absolute;
+      top: 10px;
+      right: 0; }
+  .ui-datepick .ui-datepick-bd {
+    box-sizing: border-box;
+    text-align: left; }
+    .ui-datepick .ui-datepick-bd .ui-datepick-content {
+      width: 95%;
+      margin: 0 auto;
+      padding: 10px 0; }
+      .ui-datepick .ui-datepick-bd .ui-datepick-content .time-item {
+        font-size: 16px;
+        display: inline-block;
+        border: 1px solid #017aff;
+        color: #017aff;
+        margin: 5px 2px;
+        padding: 2px 5px; }
 
 /*# sourceMappingURL=maps/index.css.map */
