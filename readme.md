@@ -153,28 +153,36 @@ entry可以是个字符串或数组或者是对象。
 当entry是个字符串的时候，用来定义入口文件：
 
 1 entry: './js/main.js'
-当entry是个数组的时候，里面同样包含入口js文件，另外一个参数可以是用来配置webpack提供的一个静态资源服务器，webpack-dev-server。webpack-dev-server会监控项目中每一个文件的变化，实时的进行构建，并且自动刷新页面：
+当entry是个数组的时候，里面同样包含入口js文件，另外一个参数可以是用来配置webpack提供的一个静态资源服务器，webpack-dev-server。webpack-dev-server会监控项目中每一个文件的变化，实时的进行构建，并且自动刷新页面:
 
-1 entry: [
-2     'webpack/hot/only-dev-server',
-3     './js/app.js'
-4 ]
+```
+entry: [
+    'webpack/hot/only-dev-server',
+    './js/app.js'
+]
+
+```
 当entry是个对象的时候，我们可以将不同的文件构建成不同的文件，按需使用，比如在我的hello页面中只要\<script src='build/Profile.js'></script>引入hello.js即可：
 
-1 entry: {
-2     hello: './js/hello.js',
-3     form: './js/form.js'
-4 }
- 
+```
+entry: {
+    hello: './js/hello.js',
+    form: './js/form.js'
+}
+
+```
 
 2.output
 
 output参数是个对象，用于定义构建后的文件的输出。其中包含path和filename：
 
-1 output: {
-2     path: './build',
-3     filename: 'bundle.js'
-4 }
+```
+output: {
+    path: './build',
+    filename: 'bundle.js'
+}
+
+```
 当我们在entry中定义构建多个文件时，filename可以对应的更改为[name].js用于定义不同文件构建后的名字。
 
  
@@ -183,44 +191,55 @@ output参数是个对象，用于定义构建后的文件的输出。其中包�
 
 关于模块的加载相关，我们就定义在module.loaders中。这里通过正则表达式去匹配不同后缀的文件名，然后给它们定义不同的加载器。比如说给less文件定义串联的三个加载器（！用来定义级联关系）：
 
-复制代码
-复制代码
-1 module: {
-2     loaders: [
-3         { test: /\.js?$/, loaders: ['react-hot', 'babel'], exclude: /node_modules/ },
-4         { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
-5         { test: /\.css$/, loader: "style!css" },
-6         { test: /\.less/, loader: 'style-loader!css-loader!less-loader'}
-7     ]
-8 }
-复制代码
-复制代码
+```
+module: {
+    loaders: [
+        { test: /\.js?$/, loaders: ['react-hot', 'babel'], exclude: /node_modules/ },
+        { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
+        { test: /\.css$/, loader: "style!css" },
+        { test: /\.less/, loader: 'style-loader!css-loader!less-loader'}
+    ]
+}
+```
+
 此外，还可以添加用来定义png、jpg这样的图片资源在小于10k时自动处理为base64图片的加载器：
 
-1 { test: /\.(png|jpg)$/,loader: 'url-loader?limit=10000'}
+```
+{ test: /\.(png|jpg)$/,loader: 'url-loader?limit=10000'}
+```
 给css和less还有图片添加了loader之后，我们不仅可以像在node中那样require js文件了，我们还可以require css、less甚至图片文件：
 
-1 require('./bootstrap.css');
-2 require('./myapp.less');
-3 var img = document.createElement('img');
-4 img.src = require('./glyph.png');
+```
+
+require('./bootstrap.css');
+require('./myapp.less');
+var img = document.createElement('img');
+img.src = require('./glyph.png');
+
+```
+
 但是需要知道的是，这样require来的文件会内联到 js bundle中。如果我们需要把保留require的写法又想把css文件单独拿出来，可以使用下面提到的[extract-text-webpack-plugin]插件。
 
 在上面示例代码中配置的第一个loaders我们可以看到一个叫做react-hot的加载器。我的项目是用来学习react写相关代码的，所以配置了一个react-hot加载器，通过它，可以实现对react组件的热替换。我们已经在entry参数中配置了`webpack/hot/only-dev-server`,所以我们只要在启动webpack开发服务器时开启--hot参数，就可以使用react-hot-loader了。在package.json文件中这样定义：
 
-1 "scripts": {
-2     "start": "webpack-dev-server --hot --progress --colors",
-3     "build": "webpack --progress --colors"
-4 }
- 
+```
+"scripts": {
+    "start": "webpack-dev-server --hot --progress --colors",
+    "build": "webpack --progress --colors"
+}
+
+```
 
 4.resolve
 
 webpack在构建包的时候会按目录的进行文件的查找，resolve属性中的extensions数组中用于配置程序可以自行补全哪些文件后缀：
 
-1 resolve:{
-2     extensions:['','.js','.json']
-3 }
+```
+resolve:{
+    extensions:['','.js','.json']
+}
+```
+
 然后我们想要加载一个js文件时，只要require('common')就可以加载common.js文件了。
 
 
@@ -228,18 +247,20 @@ webpack在构建包的时候会按目录的进行文件的查找，resolve属性
 
 webpack提供了[丰富的组件]用来满足不同的需求，当然我们也可以自行实现一个组件来满足自己的需求。在我的项目里面没有特殊的需求，于是便只是配置了NoErrorsPlugin插件，用来跳过编译时出错的代码并记录，使编译后运行时的包不会发生错误：
 
-1 plugins: [
-2     new webpack.NoErrorsPlugin()
-3 ]
- 
+```
+plugins: [
+    new webpack.NoErrorsPlugin()
+]
+```
 
 6.externals
 
 当我们想在项目中require一些其他的类库或者API，而又不想让这些类库的源码被构建到运行时文件中，这在实际开发中很有必要。此时我们就可以通过配置externals参数来解决这个问题：
-
-1 externals: {
-2     "jquery": "jQuery"
-3 }
+```
+externals: {
+    "jquery": "jQuery"
+}
+```
 这样我们就可以放心的在项目中使用这些API了：var jQuery = require("jquery");
 
  
@@ -248,7 +269,7 @@ webpack提供了[丰富的组件]用来满足不同的需求，当然我们也�
 
 当我们在require一个模块的时候，如果在require中包含变量，像这样：
 
-1 require("./mods/" + name + ".js");
+``` require("./mods/" + name + ".js");
 
 那么在编译的时候我们是不能知道具体的模块的。但这个时候，webpack也会为我们做些分析工作：
 
@@ -257,10 +278,11 @@ webpack提供了[丰富的组件]用来满足不同的需求，当然我们也�
 
 于是这个时候为了更好地配合wenpack进行编译，我们可以给它指明路径，像在cake-webpack-config中所做的那样（我们在这里先忽略abcoption的作用）：
 
-1 var currentBase = process.cwd();
-2 var context = abcOptions.options.context ? abcOptions.options.context : 
-3 path.isAbsolute(entryDir) ? entryDir : path.join(currentBase, entryDir);
-
+```
+var currentBase = process.cwd();
+var context = abcOptions.options.context ? abcOptions.options.context : 
+path.isAbsolute(entryDir) ? entryDir : path.join(currentBase, entryDir);
+```
 
 
 
@@ -287,10 +309,6 @@ $ webpack -d //生成map映射文件，告知哪些模块被最终打包到哪�
 关于工具的定位
 
 webpack的定位是module bundler，作为模块化工具，它的竞争对手看起来更像是[browserify]，而不是[Gulp]，基于流的自动化构建工具。
-
-
-
-
 
 
 
