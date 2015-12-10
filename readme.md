@@ -137,8 +137,6 @@ module.exports = {
 ```
 
 
--- [参考手册](https://christianalfoni.github.io/react-webpack-cookbook/)
-
 
 
 
@@ -318,3 +316,4 @@ webpack的定位是module bundler，作为模块化工具，它的竞争对手�
  * [webpack](https://github.com/webpack/webpack#installation)
  * [webpack-howto](https://github.com/petehunt/webpack-howto)
  * [webpack compared](http://survivejs.com/webpack_react/webpack_compared/)
+ * [参考手册](https://christianalfoni.github.io/react-webpack-cookbook/)
