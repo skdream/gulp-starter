@@ -14,6 +14,8 @@ var cssmin = require('gulp-cssmin');
 // var livereload = require('gulp-livereload');
 
 
+
+
 var webpack = require('gulp-webpack');
 
 
@@ -109,6 +111,35 @@ gulp.task('js', function () {
 });
 
 
+
+gulp.task('scripts', function() {
+  return gulp.src('./js/*.js')
+    .pipe(concat('all.js'))
+    .pipe(rev())
+    .pipe(gulp.dest('./dist/js/'))
+    .pipe(rev.manifest())
+    .pipe(gulp.dest('./dist/rev/js'));
+});
+
+gulp.task('html', function () {
+  return gulp.src([ './index.html']) //'./dist/rev/**/*.json',
+    .pipe( minifyHTML({
+                empty:true,
+                spare:true
+            }) )
+    .pipe(revCollector({
+      dirReplacements: {
+        'css':'css',
+        'js':'js',
+        'build/': ''
+      }
+    }))
+    .pipe(gulp.dest('./dist/'));
+});
+
+
+
+
 gulp.task('jsDev', function () {
   return gulp.src(['./js/*.js'])
     //.pipe(concat('app.js'))
@@ -163,6 +194,11 @@ gulp.task('watch', function () {
   gulp.watch('js/*.js', ['jsDev']);
   gulp.watch('*.html',['html']);
 });
+
+
+
+
+
 
 
 

@@ -112,8 +112,6 @@ function is_leap(year) {
 }
 
 
-
-
 function Calendar(opts){
 
 	this.beginDate = "1900-01-01".toDate();
@@ -145,7 +143,6 @@ function Calendar(opts){
     	this.endDate = opts.endDate;
     }
 
-
 	this.draw(this.date);
 	this.bindEvent();
 }
@@ -158,10 +155,10 @@ Calendar.prototype.draw = function(date){
 
 	//var date = this.date;
 
-	if( $('.ui-datepick').length ){
-		this.show();
-		return;
-	}
+	// if( $('.ui-datepick').length ){
+	// 	this.show();
+	// 	return;
+	// }
 
 	var daysHtml = [];
 	var timeHtml = [];
@@ -173,54 +170,53 @@ Calendar.prototype.draw = function(date){
 		daysHtml.push('<li data-date=' + i  + ( i==0 ? ' class="active"': '') +'><b class="alias">'+topHeader[i]+'</b><b class="date">' + nDate.format('MM月dd日') + '</b></li>');
 	}
 
+	var html = [' <div class="ui-masker"></div> <div class="ui-datepick"><ul class="ui-datepick-hd clearfix">',
+			daysHtml.join(''),
+			'</ul><div class="ui-datepick-bd"><div class="ui-datepick-content">',
+	    	//timeHtml.join(''),	
+    		'</div>	</div> </div>'
+    		];
+
+    this.$datePicker = $(html.join('')).appendTo('body');
+
+    this.drawTime(date);
+
+}
+
+Calendar.prototype.drawTime = function(date){
+
+	var conf = this.config;
+	var timeHtml = [];
 	var curHour = date.getHours();
-
-
 	var beginHour = parseInt(conf.beginHour,10);
 	var endHour = parseInt(conf.endHour,10);
-
-
 	var start = '';
-
 
 	if(curHour > beginHour){
 		beginHour = curHour;
 	}
 
-	for(var j=0;j<endHour-beginHour;j++){
+	for(var j=beginHour;j<endHour;j++){
 
-		// var from = j>9? j:'0'+j;
-		// var to  = j+1>9?j+1:'0'+(j+1);
+		// var from = date.dateAdd('h',j).format('hh:00');
+		// var to = date.dateAdd('h',j+1).format('hh:00');
 
-		var from = date.dateAdd('h',j).format('hh:00');
-		var to = date.dateAdd('h',j+1).format('hh:00');
+		var from = j>9? (j+':00'): ('0'+j+':00');
+		var temp = j+1;
+
+		var to = temp>9? (temp+':00'): ('0'+temp+':00');
 
 		var ymd = date.format("yyyy-MM-dd");
 		var f2T = from + '-' + to;
-		//console.log(hour);
 
-		timeHtml.push('<span data-date="'+ ymd + ' ' + to +'" class="time-item">'+ f2T  +'</span>');
-
-		 var aa = date.format("yyyy-MM-dd") + ' ' + from + '-' + to
-		 console.log(aa);
+		timeHtml.push('<span data-date="'+ ymd + ' ' + f2T +'" class="time-item">'+ f2T  +'</span>');
 	}
 
+	var $content = this.$datePicker.find('.ui-datepick-content');
 
-
-	// 
-
-
-
-	var html = [' <div class="ui-masker"></div> <div class="ui-datepick"><ul class="ui-datepick-hd clearfix">',
-			daysHtml.join(''),
-			'</ul><div class="ui-datepick-bd"><div class="ui-datepick-content">',
-	    	timeHtml.join(''),	
-    		'</div>	</div> </div>'
-    		];
-
-    this.$datePaker = $(html.join('')).appendTo('body');
-
+	$content.html(timeHtml.join(''));
 }
+
 
 Calendar.prototype.show = function(){
 	$('.ui-masker').show();
@@ -241,11 +237,24 @@ Calendar.prototype.bindEvent=function(){
 	if(conf.moduleClick){
 		$('.ui-masker').on('click',self.hide)
 	}
+
+	self.$datePicker.find('.ui-datepick-hd').on('click','li',function(){
+		var dateNum = $(this).data('date');
+		$(this).siblings().removeClass('active').end().addClass('active')
+		if(dateNum ==0){
+			self.drawTime(new Date());
+		}else{
+			self.drawTime(self.date.dateAdd('d',dateNum));
+		}
+	})
+
+
+	self.$datePicker.find('.ui-datepick-content').on('click','span',function(){
+		var datestr = $(this).data('date');
+
+		$(self.config.trigger).val(datestr);
+		self.hide();
+	})
 };
-
-
-
-
-
 
 module.exports = Calendar;
