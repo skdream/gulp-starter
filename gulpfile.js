@@ -65,7 +65,7 @@ gulp.task('cssmin',function(){
         .pipe(gulp.dest('dist/css'));
 });
 
-// ftp·¢²¼
+// ftpÂ·Â¢Â²Â¼
 
 var gutil = require( 'gulp-util' );
 var ftp = require( 'vinyl-ftp' );

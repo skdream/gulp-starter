@@ -180,7 +180,6 @@ Calendar.prototype.draw = function(date){
     this.$datePicker = $(html.join('')).appendTo('body');
 
     this.drawTime(date);
-
 }
 
 Calendar.prototype.drawTime = function(date){
