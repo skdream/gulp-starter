@@ -189,7 +189,7 @@ gulp.task('css', function () {
 
 gulp.task('watch', function () {
   gulp.watch('css/*.css', ['cssmin']);
-  gulp.watch('sass/*.scss', ['sass']);
+  // gulp.watch('sass/*.scss', ['sass']);
   gulp.watch('js/**/*.css',['jsDev','html']);
   gulp.watch('js/*.js', ['jsDev']);
   gulp.watch('*.html',['html']);
@@ -233,6 +233,6 @@ gulp.task('publish', function (callback) {
 
 gulp.task('dev', function (callback) {
   runSequence(
-    'clean',['jsDev','watch','sass'],'sass:watch','cssmin' ,'html','serve',
+    'clean',['jsDev','watch'],'sass:watch','cssmin' ,'html','serve',
     callback);
 });
